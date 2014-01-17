@@ -1,0 +1,189 @@
+<div style="width:870PX;">
+
+
+
+
+<h2><span>Introduction</span></h2>
+<p><span>I added sometimes ago in <a class="external-link" href="http://salt.readthedocs.org/en/latest/" target="_self" title="">SaltStack's</a> core, a state &amp; execution module that will enable you to control <a class="external-link" href="http://buildout.org" target="_self" title="">buildout</a> based applications.</span></p>
+<p><span>To sum up the whole thing, SaltStack is a remote controller + a central configuration management application. We are getting more and more fun with this young but already so much powerful tool</span></p>
+<p><span>As you now, buildout can be a bit brittle towards the underlying setuptools/distribute version, that's why one of the best functionality of those module is to try to modulate the bootstrap phase flags to adapt buildout to your environment. Another cool feature of the bootstrap function is to automaticaly get the last bootstrap.py version. The other functionalities of this state+module combo are naturally to make the bootstrap + run apply successfully on a dedicated host.</span></p>
+<p><span>But what happens if your buildout fails ? No worry, logs are echoed at the end of the states execution. You will also have options to modulate the verbosity (which is already a little bit verbose, sorry, old habit). As with lot of saltstack commands, you can also add to your states some onlyif/unless triggers to skip or only do the buildout run.</span></p>
+<h2><span>A simple example</span></h2>
+<p class=" "><span>You can find the sources here: </span><a href="https://github.com/kiorky/kiorky_blog_posts/tree/master/saltstack-use-the-buildout-modules">https://github.com/kiorky/kiorky_blog_posts/tree/master/saltstack-use-the-buildout-modules</a></p>
+<p class=" "><span>Create your state file, eg: </span><strong>"/srv/salt/kiorky_blog_posts/saltstack-use-the-buildout-modules/buildout.sls"</strong></p>
+<pre>
+{% set dir='/tmp/buildouttest' %}
+copy-to-dir:
+  file.recurse:
+    - name: {{dir}}
+    - source: salt://kiorky_blog_posts/saltstack-use-the-buildout-modules/b {# attention at not having endish slashes #}
+
+buildout1:
+  buildout.installed:
+    - name: {{dir}}<br />    - runas: root
+    - require:
+      - file: copy-to-dir
+
+buildout2:
+  buildout.installed:
+    - name: {{dir}}
+    - runas: root
+    - parts:
+      - test2
+    - require:
+      - file: copy-to-dir
+</pre>
+<p class=" ">and run</p>
+<b><pre>$ salt-call state.sls kiorky_blog_posts.saltstack-use-the-buildout-modules.buildout</pre></b>
+<p class=" ">This will: </p>
+<ol>
+<li>Copy the content of <a target="_self" title="" href="https://github.com/kiorky/kiorky_blog_posts/tree/master/saltstack-use-the-buildout-modules/b">/srv/salt/kiorky_blob_posts/buildout</a>  to /tmp/buildouttest</li>
+<li>Run buildout in /tmp/buildouttest as vagrant</li>
+<li>Run buildout in /tmp/buildouttest as root, and install only the 'test2' buildout part</li>
+</ol>
+<div>This will result in</div>
+<pre>local:
+----------
+          ID: copy-to-dir
+    Function: file.recurse
+        Name: /tmp/buildouttest
+      Result: True
+     Comment: Recursively updated /tmp/buildouttest
+     Changes:
+              ----------
+              /tmp/buildouttest/bootstrap.py:
+                  ----------
+                  diff:
+                      New file
+                  mode:
+                      644
+              /tmp/buildouttest/buildout.cfg:
+                  ----------
+                  diff:
+                      New file
+                  mode:
+                      644
+----------
+          ID: buildout1
+    Function: buildout.installed
+        Name: /tmp/buildouttest
+      Result: True
+     Comment: /salt-venv/bin/python bootstrap.py  -c buildout.cfg
+              /tmp/buildouttest/bin/buildout -c buildout.cfg -N
+              --------------------------------------------------------------------------------
+              Uninstalling test2.
+              Updating test.
+              test: Running echo Salt Rocks Even More
+              Salt Rocks Even More
+              --------------------------------------------------------------------------------
+              --------------------------------------------------------------------------------
+              --------------------------------------------------------------------------------
+              OUTPUT:
+              --------------------------------------------------------------------------------
+              --------------------------------------------------------------------------------
+              Log summary:
+              --------------------------------------------------------------------------------
+              DEBUG: Running /salt-venv/bin/python bootstrap.py  -c buildout.cfg
+              --------------------------------------------------------------------------------
+              --------------------------------------------------------------------------------
+              --------------------------------------------------------------------------------
+              OUTPUT:
+              Uninstalling test2.
+              Updating test.
+              test: Running echo Salt Rocks Even More
+              Salt Rocks Even More
+              --------------------------------------------------------------------------------
+              --------------------------------------------------------------------------------
+              Log summary:
+              --------------------------------------------------------------------------------
+              DEBUG: Buildout is running in non newest mode!
+              INFO: Installing all buildout parts
+              DEBUG: Running /tmp/buildouttest/bin/buildout -c buildout.cfg -N
+              --------------------------------------------------------------------------------
+     Changes:
+              ----------
+----------
+          ID: buildout2
+    Function: buildout.installed
+        Name: /tmp/buildouttest
+      Result: True
+     Comment: /salt-venv/bin/python bootstrap.py  -c buildout.cfg
+              /tmp/buildouttest/bin/buildout -c buildout.cfg -N install test2
+              --------------------------------------------------------------------------------
+              Installing test2.
+              test2: Running 'echo Salt Rocks2'
+              Salt Rocks2
+              Unused options for test2: 'update-command'.
+              --------------------------------------------------------------------------------
+              --------------------------------------------------------------------------------
+              --------------------------------------------------------------------------------
+              OUTPUT:
+              --------------------------------------------------------------------------------
+              --------------------------------------------------------------------------------
+              Log summary:
+              --------------------------------------------------------------------------------
+              DEBUG: Running /salt-venv/bin/python bootstrap.py  -c buildout.cfg
+              --------------------------------------------------------------------------------
+              --------------------------------------------------------------------------------
+              --------------------------------------------------------------------------------
+              OUTPUT:
+              Installing test2.
+              test2: Running 'echo Salt Rocks2'
+              Salt Rocks2
+              Unused options for test2: 'update-command'.
+              --------------------------------------------------------------------------------
+              --------------------------------------------------------------------------------
+              Log summary:
+              --------------------------------------------------------------------------------
+              DEBUG: Buildout is running in non newest mode!
+              INFO: Installing single part: test2
+              DEBUG: Running /tmp/buildouttest/bin/buildout -c buildout.cfg -N install test2
+              --------------------------------------------------------------------------------
+     Changes:
+
+Summary
+------------
+Succeeded: 3
+Failed:    0
+------------
+Total:     3
+
+
+</pre>
+<div></div>
+<div></div>
+<h2 class=" ">Using unless/onlyif </h2>
+<p class=" ">Change your state file, eg: <strong>"/srv/salt/kiorky_blog_posts/saltstack-use-the-buildout-modules/2.sls" to:</strong></p>
+<pre>{% set dir='/tmp/buildouttest' %}
+buildout3:
+  buildout.installed:
+    - name: {{dir}}
+    - runas: vagrant
+    - unless: test -e {{dir}}/.installed.cfg
+    - require:
+      - file: copy-to-dir<br /><br /></pre>
+<p class=" ">And run</p>
+<b><pre>$ salt-call state.sls kiorky_blog_posts.saltstack-use-the-buildout-modules.2</pre></b>
+<p class=" "><span>This will not run as you previously run buildout which in turn created the .installed file. Thus, the unless execution will suceed preventing salt from executing your state.</span></p>
+<pre>local:
+----------
+          ID: buildout3
+    Function: buildout.installed
+        Name: /tmp/buildouttest
+      Result: True
+     Comment: unless execution succeeded
+     Changes:
+              ----------
+
+Summary
+------------
+Succeeded: 1
+Failed:    0
+------------
+Total:     1
+</pre>
+
+
+
+
+</div>
