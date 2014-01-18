@@ -24,7 +24,8 @@ There is a problem if super_undefined_var is undefined, as it is a default value
 local:
     Data failed to compile:
     ----------
-        Rendering SLS "base:kiorky_blog_posts.saltstack-deep-macro-var-error.test" failed: Jinja error: global name 'l_super_undefined_var' is not defined; line 1
+        Rendering SLS "base:kiorky_blog_posts.saltstack-deep-macro-var-error.test" failed:
+        Jinja error: global name 'l_super_undefined_var' is not defined; line 1
 
         ---
         {% macro foo(argument=super_undefined_var) %}    <======================
