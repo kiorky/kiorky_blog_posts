@@ -1,44 +1,19 @@
-<div style="width:870PX;">
-
-<h1>
-SaltStack: How to detect Jinja error: global name 'l_.*'  is not defined;
-</h1>
-
 <h2>Introduction</h2>
-<p class=" "><span>You can find the sources here: </span>
-<a href="https://github.com/kiorky/kiorky_blog_posts/tree/master/saltstack-deep-macro-var-error">https://github.com/kiorky/kiorky_blog_posts/tree/master/saltstack-deep-macro-var-error</a>
-</p>
-</div>
-
+<p class=" "><span>You can find the sources here: </span> <a href="https://github.com/kiorky/kiorky_blog_posts/tree/master/saltstack-deep-macro-var-error">https://github.com/kiorky/kiorky_blog_posts/tree/master/saltstack-deep-macro-var-error</a></p>
 <h2>The problem</h2>
-Consider this sls:
-<pre>
-{% macro foo(argument=super_undefined_var) %}
+<p>Consider this sls:</p>
+<pre>{% macro foo(argument=super_undefined_var) %}
 
 {% endmacro %}
 </pre>
-
-There is a problem if super_undefined_var is undefined, as it is a default value for a macro, it will ends up with a cryptic and undebuggable salt/jinja rendering error:
-
-<pre>
-local:
+<p>There is a problem if super_undefined_var is undefined. As it is a default value for a macro, it will ends up with a cryptic and undebuggable salt/jinja rendering error:</p>
+<pre>local:
     Data failed to compile:
     ----------
-        Rendering SLS "base:kiorky_blog_posts.saltstack-deep-macro-var-error.test" failed:
-        Jinja error: global name 'l_super_undefined_var' is not defined; line 1
+        Rendering SLS "base:kiorky_blog_posts.saltstack-deep-macro-var-error.test" failed: <br />        Jinja error: global name 'l_super_undefined_var' is not defined; line 1
 
         ---
-        {% macro foo(argument=super_undefined_var) %}    <======================
-
-        {% endmacro %}
-        ---
+        {% macro foo(argument=super_undefined_var) %}    
 
 </pre>
-
-
-
-So the idea to keep in mind is that if you see a variable error prefixed with <b>l_</b>, it can be the local jinja namespace and the real undefined variable is what you have after the <b>l_</b>, here is it <b>super_undefined_var</b>
-
-
-
-</div>
+<p>So the idea to keep in mind is that if you see a variable error prefixed with <b>l_</b>, it can be the local jinja namespace and the actual undefined variable is what you have after the <b>l_</b>. Here it is <b>super_undefined_var</b>.</p>
