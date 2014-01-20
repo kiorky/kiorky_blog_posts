@@ -1,11 +1,7 @@
-<div style="width:870PX;">
-
-
-
 <h2><span>Introduction</span></h2>
-<p><span>I added sometimes ago in <a class="external-link" href="http://salt.readthedocs.org/en/latest/" target="_self" title="">SaltStack's</a> core, a state &amp; execution module that will enable you to control <a class="external-link" href="http://buildout.org" target="_self" title="">buildout</a> based applications.</span></p>
+<p><span>I added some times ago, in <a class="external-link" href="http://salt.readthedocs.org/en/latest/" target="_self" title="">SaltStack's</a> core, a state &amp; execution module that will enable you to control <a class="external-link" href="http://buildout.org" target="_self" title="">buildout</a> based applications.</span></p>
 <p><span>To sum up the whole thing, SaltStack is a remote controller + a central configuration management application. We are getting more and more fun with this young but already so much powerful tool.</span></p>
-<p><span>As you now, buildout can be a bit brittle towards the underlying setuptools/distribute version, that's why one of the best functionality of those module is to try to modulate the bootstrap phase flags to adapt buildout to your environment. Another cool feature of the bootstrap function is to automaticaly get the last bootstrap.py version. The other functionalities of this state+module combo are naturally to make the bootstrap + run apply successfully on a dedicated host.</span></p>
+<p><span>As you know, buildout can be a bit brittle towards the underlying setuptools/distribute version, that's why one of the best functionality of those modules is to try to modulate the bootstrap phase flags to adapt buildout to your environment. Another cool feature of the bootstrap function is to automaticaly get the last bootstrap.py version. The other functionalities of this state+module combo are naturally to make the bootstrap + run apply successfully on a dedicated host.</span></p>
 <p><span>But what happens if your buildout fails ? No worry, logs are echoed at the end of the states execution. You will also have options to modulate the verbosity (which is already a little bit verbose, sorry, old habit). As with lot of saltstack commands, you can also add to your states some onlyif/unless triggers to skip or only do the buildout run.</span></p>
 <h2><span>A simple example</span></h2>
 <p class=" "><span>You can find the sources here: </span><a href="https://github.com/kiorky/kiorky_blog_posts/tree/master/saltstack-use-the-buildout-modules">https://github.com/kiorky/kiorky_blog_posts/tree/master/saltstack-use-the-buildout-modules</a></p>
@@ -31,15 +27,15 @@ buildout2:
     - require:
       - file: copy-to-dir
 </pre>
-<p class=" ">and run</p>
+<p class=" ">And run:</p>
 <pre>$ salt-call state.sls kiorky_blog_posts.saltstack-use-the-buildout-modules.buildout</pre>
 <p class=" ">This will:</p>
 <ol>
-<li>Copy the content of <a href="https://github.com/kiorky/kiorky_blog_posts/tree/master/saltstack-use-the-buildout-modules/b" target="_self" title="">/srv/salt/kiorky_blob_posts/buildout</a> to /tmp/buildouttest</li>
-<li>Run buildout in /tmp/buildouttest as root</li>
-<li>Run buildout in /tmp/buildouttest as vagrant, and install only the 'test2' buildout part</li>
+<li>Copy the content of <a href="https://github.com/kiorky/kiorky_blog_posts/tree/master/saltstack-use-the-buildout-modules/b" target="_self" title="">/srv/salt/kiorky_blob_posts/buildout</a> to /tmp/buildouttest.</li>
+<li>Run buildout in /tmp/buildouttest as root.</li>
+<li>Run buildout in /tmp/buildouttest as vagrant, and install the 'test2' buildout part only.</li>
 </ol>
-<div>This will result in</div>
+<div>This will result in:</div>
 <pre>local:
 ----------
           ID: copy-to-dir
@@ -151,7 +147,7 @@ Total:     3
 <div></div>
 <div></div>
 <h2 class=" ">Using unless/onlyif</h2>
-<p class=" ">Change your state file, eg: <strong>"/srv/salt/kiorky_blog_posts/saltstack-use-the-buildout-modules/2.sls" to:</strong></p>
+<p class=" ">Change your state file, eg: <strong>"/srv/salt/kiorky_blog_posts/saltstack-use-the-buildout-modules/2.sls" </strong>to:</p>
 <pre>{% set dir='/tmp/buildouttest' %}
 buildout3:
   buildout.installed:
@@ -160,7 +156,7 @@ buildout3:
     - unless: test -e {{dir}}/.installed.cfg
     - require:
       - file: copy-to-dir<br /><br /></pre>
-<p class=" ">And run</p>
+<p class=" ">And run:</p>
 <pre>$ salt-call state.sls kiorky_blog_posts.saltstack-use-the-buildout-modules.2</pre>
 <p class=" "><span>This will not run as you previously run buildout which in turn created the .installed file. Thus, the unless execution will suceed preventing salt from executing your state.</span></p>
 <pre>local:
@@ -180,7 +176,3 @@ Failed:    0
 ------------
 Total:     1
 </pre>
-
-
-
-</div>
