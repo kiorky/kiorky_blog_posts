@@ -1,66 +1,46 @@
 <h2>Salt Cloud can now spawn LXC Containers, or how SaltStack made lxc containers managment easy</h2>
-
-<h3>Introduction</h3>
-<p>I just added some great things to SaltStack for lxc managment<br/>
-Indeed we all want docker but we also have some legacy application and transition phases, and even deadlines preventing us to do what would be the best.<br>
-So idea ? Use lxc containers in transition.
-But, at this time, LXC support was not that much complete  with SaltStack so i decided to integrate it with salt-cloud.<br>
-My idea behind the wall is to make our provisions with the same interface: cloud ones, lxc ones but also baremetal ones and here salt-cloud is the perfect tool.<br/>
-</p>
-<p>
-<ul>This one will at least:
-  <li>Create the "node" if applicable</li>
-  <li>Base configure it</li>
-  <li>Bootstrap it</li>
-  <li>Link the provionned new vm/container to the up level master as a minion</li>
+<h2>Introduction</h2>
+<p class=" "><span>I just added some great things to SaltStack for LXC containers managment.<br /></span><span>Indeed we all want docker but we also have some legacy application and transition phases, and even deadlines preventing us to do what would be the best.</span></p>
+<p>So idea ? Use lxc containers in transition.<br />But, at this time, LXC support was not that much complete with SaltStack so i decided to integrate it with salt-cloud.<br /> My idea behind the wall is to make our provisions with the same interface: cloud ones, lxc ones but also baremetal ones and here salt-cloud is the perfect tool.</p>
+<p>This one will at least:</p>
+<ul>
+<li>Create the "node" if applicable</li>
+<li>Base configure it</li>
+<li>Bootstrap it</li>
+<li>Link the provionned new vm/container to the up level master as a minion</li>
 </ul>
-</p>
-
-<p>
-And depending on the driver, you can do much more via <b>"actions"</b>.
-One of those actions is trivially the "destroy" command.<br>
-</p>
-
-<h3>Presentation</h3>
-<p>
-So now, how to install an LXC Container via salt-cloud ?
-The more tedious part is in configurating your base profiles and understanding the interaction between all salt pieces.
-</p>
-
-<b>The driver has 2 provision modes</b>
+<p>And depending on the driver, you can do much more via <b>"actions"</b>. One of those actions is trivially the "destroy" command.</p>
+<p> </p>
+<p>So now, how to install an LXC Container via salt-cloud ? <br />The more tedious part is in configurating your base profiles and understanding the interaction between all salt pieces.</p>
+<p><b>The driver has 2 provision modes</b></p>
 <ul>
 <li><b>Creating</b> (using lxc-create) a LXC container from a template</li>
 <li><b>Cloning</b> (using lxc-clone) a LXC container from an existing container</li>
 </ul>
-
-<pre>
-SALT CLOUD cli or state >
-  profile / vmoptions >
-    salt-cloud provider >
-      distant/local minion >
+<pre>SALT CLOUD cli or state &gt;
+  profile / vmoptions &gt;
+    salt-cloud provider &gt;
+      distant/local minion &gt;
         execution module for LXC managment
 </pre>
 <ul>To summarise:
 <li>We need a salt minion which will be the 'LXC host' for the containers</li>
-<li>That host must be running a <b>decent LXC version ( > 1.0 )</b></li>
+<li>That host must be running a <b>decent LXC version ( &gt; 1.0 )</b></li>
 <li>We need at least one salt-cloud provider that indicates which minion to install LXC containers onto</li>
 <li>We need a salt cloud profile defining the containers properties.</li>
 <li>This profile will be linked to the provider</li>
 <li>We can then create a salt cloud vm !</li>
 </ul>
-
-<h3>Practising</h3>
-<p>First thing is to create a provider, and we indicate on which minion we want to operate the creation of LXC containers<br>
-<b>/etc/salt/cloud.providers.d/lxc.conf</b>
-<pre>
-devhost10-local-lxc:
+<h2>Practising</h2>
+<h3>Creating</h3>
+<p>First thing is to create a provider, and we indicate on which minion we want to operate the creation of LXC containers<br /><b>/etc/salt/cloud.providers.d/lxc.conf</b></p>
+<pre>devhost10-local-lxc:
   target: devhost10.local
   provider: lxc
-</pre> </p>
-<p>The second thing is that we will need a profile to provision our vms not to repeat each option at any time</p>
-<b>/etc/salt/cloud.profiles.d/lcx.conf</b>
-<pre>
-fancy-lxc:
+</pre>
+<p>The second thing is that we will need a profile to provision our vms not to repeat each options each time</p>
+<p><b>/etc/salt/cloud.profiles.d/lcx.conf</b></p>
+<pre>fancy-lxc:
   # the provider to use
   provider: devhost10-local-lxc
   # lxc options, read the LXC driver documentation and ... code :)
@@ -80,23 +60,17 @@ fancy-lxc:
     master: 10.0.3.1
     master_port: 4506
 </pre>
-<p>
-Now it's time to create a box, you will need it's name, mac (generate a random but unique one) and ip.
-My personal way of using salt cloud is via states, so just create a sls:<br/>
-<b>/srv/salt/cloud.sls:</b>
-<pre>
-myfancylxc:
+<p>Now it's time to create a box, you will need it's name, mac (generate a random but unique one) and ip. My personal way of using salt cloud is via states, so just create a sls:<br /> <b>/srv/salt/cloud.sls:</b></p>
+<pre>myfancylxc:
   cloud.profile:
     - profile: fancy-lxc
     - mac: 00:16:3e:14:e7:e0
     - ip: 10.0.3.54
 </pre>
-And run it with
+<p>And run it with</p>
 <pre>salt-call state.sls cloud</pre>
-</p>
-<p>And after a while, after the sucessfulness of the last command, you can ping your new minion which is a lxc container:<br>
-<pre>
-local:
+<p>And after a while, after the sucessfulness of the last command, you can ping your new minion which is a lxc container:</p>
+<pre>local:
 ----------
           ID: myfancylxc
     Function: cloud.profile
@@ -130,18 +104,14 @@ Failed:    0
 Total:     1
 
 </pre>
-<b>salt myfancylxc test.ping</b>
-<pre>
-myfancylxc:
+<p><br /> <b>salt myfancylxc test.ping</b></p>
+<pre>myfancylxc:
   True
 </pre>
-</p>
-
-<p>We can even make a profile to use our previous vm as a base for other containers<br/>
-Take a look to the <b>from_container</b> attribute.
-<b>/etc/salt/cloud.profiles.d/lcx2.conf</b>
-<pre>
-snapshoted-lxc:
+<h3>Cloning</h3>
+<p>We can even make a profile to use our previous vm as a base for other containers<br /> Take a look to the <b>from_container</b> attribute. <br /><b>/etc/salt/cloud.profiles.d/lcx2.conf</b></p>
+<pre>snapshoted-lxc:
+  provider: devhost10-local-lxc
   from_container: myfancylxc
   backing: lvm
   bridge: lxcbr0
@@ -155,27 +125,122 @@ snapshoted-lxc:
     master: 10.0.3.1
     master_port: 4506
 </pre>
-<b>/srv/salt/cloud2.sls:</b>
-<pre>
-myfancylxc2:
+<p><b>/srv/salt/cloud2.sls:</b></p>
+<pre>myfancylxc2:
   cloud.profile:
     - profile: snapshoted-lxc
     - mac: 00:16:3e:14:e7:e1
-    - ip: 10.0.3.56
-<pre>
-and run it with
+    - ip: 10.0.3.56</pre>
+<pre>and run it with</pre>
 <pre>salt-call state.sls cloud2</pre>
-</p>
-<p>And after a while, after the sucessfulness of the last command, you can ping your new minion which is a lxc container:<br>
-<b>salt myfancylxc test.ping</b>
-<pre>
-myfancylxc2:
+<pre>local:
+----------
+          ID: myfancylxc2
+    Function: cloud.profile
+      Result: False
+     Comment: An exception occurred in this state: Traceback (most recent call last):
+                File "/srv/salt/makina-states/src/salt/salt/state.py", line 1372, in call
+                  **cdata['kwargs'])
+                File "/srv/salt/makina-states/src/salt/salt/states/cloud.py", line 237, in profile
+                  info = __salt__['cloud.profile'](profile, name, vm_overrides=kwargs)
+                File "/srv/salt/makina-states/src/salt/salt/modules/cloud.py", line 144, in profile_
+                  info = client.profile(profile, names, vm_overrides=vm_overrides, **kwargs)
+                File "/srv/salt/makina-states/src/salt/salt/cloud/__init__.py", line 266, in profile
+                  mapper.run_profile(profile, names, vm_overrides=vm_overrides))
+                File "/srv/salt/makina-states/src/salt/salt/cloud/__init__.py", line 1108, in run_profile
+                  ret[name] = self.create(vm_)
+                File "/srv/salt/makina-states/src/salt/salt/cloud/__init__.py", line 1019, in create
+                  output = self.clouds[func](vm_)
+                File "/srv/salt/makina-states/src/salt/salt/cloud/clouds/lxc.py", line 469, in create
+                  _checkpoint(ret)
+                File "/srv/salt/makina-states/src/salt/salt/cloud/clouds/lxc.py", line 286, in _checkpoint
+                  raise SaltCloudSystemExit(sret)
+              SaltCloudSystemExit:
+              id: myfancylxc2
+              last message: container could not be created: lxc_container: error: Original container (myfancylxc) is running
+              clone failed
+              Container cloning error
+                  100_creation:
+                    container could not be created: lxc_container: error: Original container (myfancylxc) is running
+                    clone failed
+                    Container cloning error
+     Changes:
+</pre>
+<p class=" ">OUPS !!! We should stop our previous container the time to provision.</p>
+<pre>lxc-stop -n myfancylxc
+salt-call -lall state.sls cloud
+</pre>
+<p class=" ">It will fail again with a bunch of</p>
+<pre>[DEBUG   ] Caught exception in wait_for_fun: Unresponsive myfancylxc2
+</pre>
+<p class=" ">This is because the cloned container included the minion keys and the minion was alive with those keys before salt cloud can even replace them. The solution is to prepare a bit our clone.</p>
+<pre># trashing the unfinished stuff
+salt-cloud -d myfancylxc2
+# clone the first container
+lxc-clone -n template -o myfancylxc
+# mount &amp; clean it (if your not using lvm, adapt it to your setup)
+mkdir test
+# use the LVM logical volume
+mount /dev/lxc/template test
+rm -f test/etc/salt/pki/minion/minion* test/etc/salt/minion
+umount test
+rm -rf test
+</pre>
+<p class=" ">Then update the profile to include the template in place of myfancylxc.<br /> <b>/etc/salt/cloud.profiles.d/lcx2.conf</b></p>
+<pre>snapshoted-lxc:
+  provider: devhost10-local-lxc
+  from_container: template
+  backing: lvm
+  bridge: lxcbr0
+  gateway: 10.0.3.1
+  mac: 00:16:3e:14:e7:e1
+  sudo: True
+  vgname: lxc
+  ssh_username: ubuntu
+  password: foobar
+  minion:
+    master: 10.0.3.1
+    master_port: 4506
+</pre>
+<p class=" ">And this was the good one !</p>
+<pre>local:
+----------
+          ID: myfancylxc2
+    Function: cloud.profile
+      Result: True
+     Comment: Minion is alive for salt commands
+     Changes:
+              ----------
+              100_creation:
+                  Container cloned
+
+              150_conf:
+                  lxc conf ok
+              200_start:
+                  started
+              250_password:
+                  Password updated
+              300_ipattrib:
+                  Got ip 10.0.3.56
+              350_dns:
+                  DNS updated
+              400_salt:
+                  This vm is now a salt minion
+              401_salt:
+                  Minion is alive for salt commands
+
+Summary
+------------
+Succeeded: 1
+Failed:    0
+------------
+Total:     1
+
+</pre>
+<p>And after a while, after the sucessfulness of the last command, you can ping your new minion which is a lxc container:<br /> <b>salt myfancylxc test2.ping</b></p>
+<pre>myfancylxc2:
   True
-</pre> </p>
-<p>Want a complex example for running away ?
-See an example <a href="https://github.com/makinacorpus/makina-states/blob/master/services/cloud/lxc-standalone.sls#L57">here</a></p>
-<p>
-Still impressed by that stuff ? :)<br/>
-The terrible news is that cool stuff is on our <a href="https://github.com/makinacorpus/salt">fork</a>.
-This in in a review process (but is approved) and will be merged soon to saltcloud/develop branch.
-</p>
+</pre>
+<h2>Conclusion</h2>
+<p><span>Want a complex example for running away ? See an example </span><a href="https://github.com/makinacorpus/makina-states/blob/master/services/cloud/lxc-standalone.sls#L57">here</a></p>
+<p>Still impressed by that stuff ? :)<br /> The terrible news is that cool stuff is on our <a href="https://github.com/makinacorpus/salt">fork</a>. <br />This in in a review process (but is approved) and will be merged soon to salt/develop branch.</p>
