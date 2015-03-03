@@ -10,8 +10,10 @@ And, yes with the plain old school mapserv cgi.
 
 <img src="nginx_vs_apache.png" alt="logo">
 
+<p>
 Hopefully, we won't have to get apache back because : <img src="topsecret.png" /> :
 [uwsgi](https://uwsgi-docs.readthedocs.org/en/latest/), the savior.
+</p>
 
 
 <h2>Prerequisites</h2>
@@ -40,9 +42,9 @@ apt-get install mapserv uwsgi nginx
 ## Mapsserver
 <img src="mapserverlogo.png" /> 
 
-When you have at least all of those 3 prerequisites, you ll have to la
+<p>When you have at least all of those 3 prerequisites, you ll have to la
 y down your served maps on the filesystem
-An example here:
+An example here:</p>
 <pre>
 /data/tmp
 /data/maps/map/map.map
@@ -54,13 +56,13 @@ An example here:
 /data/maps/map/layer/Layer.shx
 </pre>
 
-Don't forget to reference shape in your top section in the mapfile:
+<p>Don't forget to reference shape in your top section in the mapfile:</p>
 <pre>
 MAP
   SHAPEPATH "/data/maps"
 </pre>
 
-Don't forget to reference images path in your WEP section in the mapfile:
+<p>Don't forget to reference images path in your WEP section in the mapfile:</p>
 <pre>
 WEB
   IMAGEPATH "/data/tmp"
@@ -68,11 +70,11 @@ WEB
 END
 </pre>
 
-## NGINX Vhost
+<h2>NGINX Vhost</h2>
 <img src="Nginx-logo.png"/> 
 
-The first thing is to add to the server, some mapped variables that will route
-our requests down to the uwsgi worker
+<p>The first thing is to add to the server, some mapped variables that will route
+our requests down to the uwsgi worker</p>
 <pre>
 map $args $mapname {
     default: myapp;
@@ -102,9 +104,9 @@ location /tiles/ {
 }
 </pre>
 
-Then a section to enable routing down to the worker by relying on the retcode from the mapped variables
+<p>Then a section to enable routing down to the worker by relying on the retcode from the mapped variables
 that we defined above. This will ensure that only the expected request can go down to the uwsgi worker, as you know,
-mapserver can also take an arbitrary mapfile path, and be a security breach.
+mapserver can also take an arbitrary mapfile path, and be a security breach.</p>
 <pre>
 location /cgi-bin/mapserv {
   error_page 420 = @mapserv;
@@ -113,12 +115,12 @@ location /cgi-bin/mapserv {
   }
 }
 </pre>
-When upon, we detect that "mapgo=1", so when the ``map`` get parameter matches one of our maps,
+<p>When upon, we detect that "mapgo=1", so when the ``map`` get parameter matches one of our maps,
 we will internally return **420** errcode, which is handled by a named location which will
-be processed by our mapserver worker.
+be processed by our mapserver worker.</p>
 
 
-And another related section to do the real stuff
+<p>And another related section to do the real stuff</p>
 <pre>
 location @mapserv {
    include uwsgi_params;
