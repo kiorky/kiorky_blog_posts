@@ -283,6 +283,7 @@ location @mapserv {
 
 Now the capture shown a correct **09** **modifier1**.
 ```
+tcpdump port 3031 -vvvvv -XX -i lo
         foo.net.53422 > foo.net.3031: ...
         0x0000:  0000 0000 0000 0000 0000 0000 0800 4500  ..............E.
         0x0010:  0292 643c 4000 4006 d627 7f00 0001 7f00  ..d<@.@..'......
