@@ -102,7 +102,7 @@ uwsgi
 socket = localhost:3031
 ```
 
-Then restart nginx, stop uwsgi emperor, and run only our worker, in foreground
+Then restart nginx, stop uwsgi emperor, and run only our worker, in foreground (non daemonized)
 ```
 service nginx restart
 service uwsgi stop
@@ -121,14 +121,15 @@ service nginx restart
 tail -f /foo.log
 ```
 
-Then we can finally do the capture of a map request
+Then, we can finally do the capture of a map request:
 
-from one terminal
+- from one terminal:
+
 ```
 curl -vvvv http://foo.net/cgi-bin/mapserv?map=mymap
 ```
 
-from antoher terminal
+- from antoher terminal:
 ```
 tcpdump port 3031 -vvvvv -XX -i lo
         ...
@@ -140,7 +141,7 @@ tcpdump port 3031 -vvvvv -XX -i lo
         ...
 ```
 
-And the following bits in uwsgi:
+< And the following bits in uwsgi:
 ```
 -- unavailable modifier requested: 0 --
 ```
