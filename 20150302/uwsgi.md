@@ -12,7 +12,7 @@ Hopefully, we won't have to get apache back because we have a ubersecret :
 [uwsgi](https://uwsgi-docs.readthedocs.org/en/latest/), the savior.
 
 
-![logo](data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAmsAAADiCAYAAAARbIDdAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+![logo]("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAmsAAADiCAYAAAARbIDdAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
 jwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAAd0SU1FB9wDFxEVBXl9uN4AAP9mSURBVHhe7L0HvG5JVea9z83dt29n
 aHKUrA0YSDKCigHFUcZxFHWUzzENmBAUEBEQBFEEFEGiCAZkFElKUCQp2MQmQxObbprO8fbN6Vv/
