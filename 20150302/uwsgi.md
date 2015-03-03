@@ -13,6 +13,7 @@ Hopefully, we won't have to get apache back because we have a ubersecret :
 
 
 <img src="nginx_vs_apache.png" alt="logo">
+<img src="topsecret.png" alt="logo">
 
 ## Prerequisites
 The first thing is to install mapserv, nginx & uwsgi.
