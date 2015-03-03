@@ -287,11 +287,11 @@ tcpdump port 3031 -vvvvv -XX -i lo
 2015/03/03 17:58:59 [debug] 1525#0: *3 uwsgi param: "REQUEST_METHOD: GET"
 </pre>
 
-After a dig in [Reading The Great Fucking protocol RFC](http://uwsgi-docs.readthedocs.org/en/latest/Protocol.html),
- We can now inspect what we could have fuck under the hood, and see that the <b>modifier</b> wrong (0 instead of 9).
+<p>After a dig in [Reading The Great Fucking protocol RFC](http://uwsgi-docs.readthedocs.org/en/latest/Protocol.html),
+ We can now inspect what we could have fuck under the hood, and see that the <b>modifier</b> wrong (0 instead of 9).</p>
 
-And we clearly saw that we were missing to tell to uwsgi to switch over the cgi plugin from nginx.
-Thus, we just needed, to ajust in nginx config, in the handler part, before the uwsgi_pass
+<p>And we clearly saw that we were missing to tell to uwsgi to switch over the cgi plugin from nginx.
+Thus, we just needed, to ajust in nginx config, in the handler part, before the uwsgi_pass</p>
 <pre>
 location @mapserv {
     ...
