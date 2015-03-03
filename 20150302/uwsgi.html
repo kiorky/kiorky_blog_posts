@@ -71,9 +71,9 @@ END
 </pre>
 
 <h2>NGINX vhost</h2>
-<img src="Nginx-logo.png"/>
 
-<p>The first thing is to add to the server, some mapped variables that will route
+
+<p><img src="Nginx-logo.png"/> The first thing is to add to the server, some mapped variables that will route
 our requests down to the uwsgi worker</p>
 <pre>
 map $args $mapname {
@@ -195,9 +195,9 @@ server {
 
 
 <h2> The uwsgi worker</h2>
-<img src="logo_uWSGI.png" />
 
-<p>In debian like, you will have to add a file /etc/uwsgi/app-available & symlink it in app-enabled.
+
+<p><img src="logo_uWSGI.png" /> In debian like, you will have to add a file /etc/uwsgi/app-available & symlink it in app-enabled.
 The content of this file will look like:</p>
 <pre>
 [uwsgi]
@@ -222,9 +222,9 @@ MapServer version 6.4.1
 </pre>
 
 <h2>Note about uwsgi protocol</h2>
-<img src="protocol.jpg"/>
 
-<p>At first, we got a 502 from the above setup, the first thing we did, to use setup
+
+<p><img src="protocol.jpg"/>At first, we got a 502 from the above setup, the first thing we did, to use setup
 was to temporary enable plain tcp communcation (no socket) between nginx and uwsgi.</p>
 <br/>
 <p>nginx</p>
