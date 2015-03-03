@@ -258,15 +258,13 @@ service nginx restart
 tail -f /foo.log
 </pre>
 
-Then, we can finally do the capture of a map request:
-
-- from one terminal:
-
+<p>Then, we can finally do the capture of a map request:
+- from one terminal:</p>
 <pre>
 curl -vvvv 'http://foo.net/cgi-bin/mapserv?map=mymap&VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities'
 502
 </pre>
-- from another terminal:
+<p>- from another terminal:</p>
 <pre>
 tcpdump port 3031 -vvvvv -XX -i lo
         ...
@@ -276,11 +274,11 @@ tcpdump port 3031 -vvvvv -XX -i lo
         0x0020:  0001 eae4 0bd7 f33f 9714 6a07 fbc9 5018  .......?..j...P.
         0x0030:  0056 0088 -> 00 <- 00 0067 0200 0c00 5155 4552  .V.....g....QUER
 </pre>
-- And the following bits in uwsgi:
+<p>- And the following bits in uwsgi:</p>
 <pre>
 -- unavailable modifier requested: 0 --
 </pre>
-- And see that the first uwsgi stuff, nginx side is
+<p>- And see that the first uwsgi stuff, nginx side is</p>
 <pre>
 2015/03/03 17:58:59 [debug] 1525#0: *3 uwsgi param: "QUERY_STRING: map=mymap"
 2015/03/03 17:58:59 [debug] 1525#0: *3 uwsgi param: "REQUEST_METHOD: GET"
