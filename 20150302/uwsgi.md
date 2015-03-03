@@ -82,15 +82,14 @@ map $args $mapgo {
 }
 ```
 
-Then in the vhost, we can add
-A section to serve tiles
+Then in the vhost, we can add a section to serve tiles
 ```
 location /tiles/ {
      alias /srv/projects/myapp/data/tmp;
 }
 ```
 
-A section to enable routing down to the worker by relying on the retcode from the mapped variables?
+Then a section to enable routing down to the worker by relying on the retcode from the mapped variables?
 ```
 location /cgi-bin/mapserv {
   error_page 420 = @mapserv;
