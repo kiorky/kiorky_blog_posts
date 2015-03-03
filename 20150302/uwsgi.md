@@ -32,6 +32,7 @@ apt-get install mapserv uwsgi nginx
 
 ## Mapsserver
 <img src="mapserverlogo.png" /> 
+
 When you have at least all of those 3 prerequisites, you ll have to la
 y down your served maps on the filesystem
 An example here:
@@ -185,6 +186,7 @@ server {
 
 ## The uwsgi worker
 <img src="logo_uWSGI.png" /> 
+
 In debian like, you will have to add a file /etc/uwsgi/app-available & symlink it in app-enabled.
 The content of this file will look like:
 ```
@@ -311,6 +313,7 @@ curl 'http://foo.net/cgi-bin/mapserv?map=mymap&VERSION=1.3.0&SERVICE=WMS&REQUEST
 
 ## Words about  gunicorn
 <img src="penguin_puppet.jpg" />
+
 Even if we could made separation of concerns by using uwsgi as our python app router of choice, we
 don't for now.
 Indeed, our policy for python workers (django, pyramid, flask & etc) is still recommend the use of gunicorn
