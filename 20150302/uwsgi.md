@@ -101,7 +101,7 @@ location /cgi-bin/mapserv {
 }
 ```
 When upon, we detect that "mapgo=1", so when the ``map`` get parameter matches one of our maps,
-we will internally return "420" errcode, which is handled by a named location which will
+we will internally return **420** errcode, which is handled by a named location which will
 be processed by our mapserver worker.
 
 
