@@ -128,7 +128,6 @@ Then, we can finally do the capture of a map request:
 ```
 curl -vvvv http://foo.net/cgi-bin/mapserv?map=mymap
 ```
-
 - from antoher terminal:
 ```
 tcpdump port 3031 -vvvvv -XX -i lo
@@ -140,8 +139,7 @@ tcpdump port 3031 -vvvvv -XX -i lo
         0x0030:  0056 0088 0000 0067 0200 0c00 5155 4552  .V.....g....QUER
         ...
 ```
-
-< And the following bits in uwsgi:
+- And the following bits in uwsgi:
 ```
 -- unavailable modifier requested: 0 --
 ```
