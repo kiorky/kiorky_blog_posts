@@ -182,7 +182,7 @@ server {
 
 
 
-## The uwsgi worker
+## <img src="logo_uWSGI.png" /> The uwsgi worker
 In debian like, you will have to add a file /etc/uwsgi/app-available & symlink it in app-enabled.
 The content of this file will look like:
 ```
