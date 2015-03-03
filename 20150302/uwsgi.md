@@ -30,7 +30,7 @@ After the repositories configuration, you can eventually install the softwares
 apt-get install mapserv uwsgi nginx
 ```
 
-## Maps layout
+## <img src="mapserverlogo.png" /> Mapsserver
 When you have at least all of those 3 prerequisites, you ll have to la
 y down your served maps on the filesystem
 An example here:
