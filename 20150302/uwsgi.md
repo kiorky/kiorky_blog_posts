@@ -116,6 +116,7 @@ location @mapserv {
    uwsgi_pass unix:///srv/projects/myapp/data/socket;
 }
 ```
+Here we explicitly disable path checking in map parameter, and pass the request down to the worker.
 
 Which give us finally:
 ```
