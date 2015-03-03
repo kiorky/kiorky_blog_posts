@@ -8,11 +8,11 @@ Bu how comes when you want to drop some old things in you infra, like cgi's ?
 That's the case when we want to publish out some shapefiles via mapserver.
 And, yes with the plain old school mapserv cgi.
 
+<img src="nginx_vs_apache.png" alt="logo">
+
 Hopefully, we won't have to get apache back because we have a ubersecret :
 [uwsgi](https://uwsgi-docs.readthedocs.org/en/latest/), the savior.
 
-
-<img src="nginx_vs_apache.png" alt="logo">
 <img src="topsecret.png" alt="logo">
 
 ## Prerequisites
