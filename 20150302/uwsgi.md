@@ -90,6 +90,9 @@ location /tiles/ {
 ```
 
 Then a section to enable routing down to the worker by relying on the retcode from the mapped variables?
+
+This will ensure that only the expected request can go down to the uwsgi worker, as you know,
+mapserver can also take an arbitrary mapfile path, and be a security breach.
 ```
 location /cgi-bin/mapserv {
   error_page 420 = @mapserv;
@@ -99,8 +102,7 @@ location /cgi-bin/mapserv {
 }
 ```
 
-This will ensure that only the expected request can go down to the uwsgi worker, as you know,
-mapserver can also take an arbitrary mapfile path, and be a security breach.
+
 
 And another related section to do the real stuff
 ```
