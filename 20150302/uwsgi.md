@@ -10,10 +10,10 @@ And, yes with the plain old school mapserv cgi.
 
 <img src="nginx_vs_apache.png" alt="logo">
 
-Hopefully, we won't have to get apache back because we have a ubersecret :
+Hopefully, we won't have to get apache back because we have a ubersecret <img src="topsecret.png" alt="logo"> :
 [uwsgi](https://uwsgi-docs.readthedocs.org/en/latest/), the savior.
 
-<img src="topsecret.png" alt="logo">
+
 
 ## Prerequisites
 The first thing is to install mapserv, nginx & uwsgi.
