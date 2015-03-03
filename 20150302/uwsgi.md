@@ -290,7 +290,7 @@ Now the capture shown a correct **09** **modifier1**.
         0x0030:  0056 0087 0000 --->09<---66 0200 0c00 5155 4552  .V.....f....QUER
 ```
 
-And a WMS *GetCaps* should work
+And a WMS **GetCapabilities** should work
 ```
 curl 'http://foo.net/cgi-bin/mapserv?map=mymap&VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities'
 ...
