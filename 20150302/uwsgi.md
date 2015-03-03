@@ -245,12 +245,7 @@ Then, we can finally do the capture of a map request:
 
 ```
 curl -vvvv 'http://foo.net/cgi-bin/mapserv?map=mymap&VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities'
-...
-
-<?xml version='1.0' encoding="ISO-8859-1" standalone="no" ?>
-<WMS_Capabilities version="1.3.0"...>
-<!-- MapServer version 6.4.1...-->
-<Service>
+502
 ```
 - from another terminal:
 ```
