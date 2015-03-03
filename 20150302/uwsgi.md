@@ -62,23 +62,23 @@ The first thing is to add to the server, some mapped variables that will route
 our requests down to the uwsgi worker
 ```
 map $args $mapname {
-    default: rempec;
-    "~*(\?|&)?map=rempec(&?|$)" rempec;
+    default: myapp;
+    "~*(\?|&)?map=myapp(&?|$)" myapp;
 }
 
 map $args $mapfile {
-    default: /srv/projects/myapp/data/maps/rempec/map.map;
-    "~*(\?|&)?map=rempec(&?|$)" /srv/projects/myapp/data/maps/rempec/map.map;
+    default: /srv/projects/myapp/data/maps/myapp/map.map;
+    "~*(\?|&)?map=myapp(&?|$)" /srv/projects/myapp/data/maps/myapp/map.map;
 }
 
 map $args $maproot {
     default: /srv/projects/myapp/data/static;
-    "~*(\?|&)?map=rempec(&?|$)" /srv/projects/myapp/data/maps;
+    "~*(\?|&)?map=myapp(&?|$)" /srv/projects/myapp/data/maps;
 }
 
 map $args $mapgo {
     default: 0;
-    "~*(\?|&)?map=rempec(&?|$)" 1;
+    "~*(\?|&)?map=myapp(&?|$)" 1;
 }
 ```
 
@@ -118,23 +118,23 @@ location @mapserv {
 Which give us finally:
 ```
 map $args $mapname {
-    default: rempec;
-    "~*(\?|&)?map=rempec(&?|$)" rempec;
+    default: myapp;
+    "~*(\?|&)?map=myapp(&?|$)" myapp;
 }
 
 map $args $mapfile {
-    default: /srv/projects/myapp/data/maps/rempec/map.map;
-    "~*(\?|&)?map=rempec(&?|$)" /srv/projects/myapp/data/maps/rempec/map.map;
+    default: /srv/projects/myapp/data/maps/myapp/map.map;
+    "~*(\?|&)?map=myapp(&?|$)" /srv/projects/myapp/data/maps/myapp/map.map;
 }
 
 map $args $maproot {
     default: /srv/projects/myapp/data/static;
-    "~*(\?|&)?map=rempec(&?|$)" /srv/projects/myapp/data/maps;
+    "~*(\?|&)?map=myapp(&?|$)" /srv/projects/myapp/data/maps;
 }
 
 map $args $mapgo {
     default: 0;
-    "~*(\?|&)?map=rempec(&?|$)" 1;
+    "~*(\?|&)?map=myapp(&?|$)" 1;
 }
 
 server {
