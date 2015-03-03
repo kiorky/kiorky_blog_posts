@@ -209,7 +209,7 @@ curl -vvv 'http://foo.net/cgi-bin/mapserv?map=mymap&VERSION=1.3.0&SERVICE=WMS&RE
 <Service>
 ```
 
-## Note about uwsgi protocol
+## Note about uwsgi protocol <img src="protocol.jpg">
 At first, we got a 502 from the above setup, the first thing we did, to use setup
 was to temporary enable plain tcp communcation (no socket) between nginx and uwsgi.
 nginx
