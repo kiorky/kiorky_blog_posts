@@ -12,7 +12,7 @@ And, yes with the plain old school mapserv cgi.
 
 <p>
 Hopefully, we won't have to get apache back because : <img src="topsecret.png" /> :
-[uwsgi](https://uwsgi-docs.readthedocs.org/en/latest/), the savior.
+<a href="https://uwsgi-docs.readthedocs.org/en/latest">uwsgi</a>, the savior.
 </p>
 
 
@@ -24,12 +24,12 @@ Your nginx must have the uwsgi module built with.
 </p>
 
 <p>
-Makina-Corpus even use their [own ppa](https://launchpad.net/~makinacorpus/+archive/ubuntu/nginx)
+Makina-Corpus even use their <a href="https://launchpad.net/~makinacorpus/+archive/ubuntu/nginx">own ppa</a>
 of it (1.7.10 at the time of this article writing).
 </p>
 
 <p>
-For mapserver, you can use [ubuntugis unstable](https://launchpad.net/~ubuntugis/+archive/ubuntu/ubuntugis-unstable).
+For mapserver, you can use <a href="https://launchpad.net/~ubuntugis/+archive/ubuntu/ubuntugis-unstable">ubuntugis unstable</a>.
 </p>
 
 <p>
@@ -40,7 +40,7 @@ apt-get install mapserv uwsgi nginx
 </pre>
 
 <h2>Mapsserver</h2>
-<img src="mapserverlogo.png" /> 
+<img src="mapserverlogo.png" />
 
 <p>When you have at least all of those 3 prerequisites, you ll have to la
 y down your served maps on the filesystem
@@ -71,7 +71,7 @@ END
 </pre>
 
 <h2>NGINX vhost</h2>
-<img src="Nginx-logo.png"/> 
+<img src="Nginx-logo.png"/>
 
 <p>The first thing is to add to the server, some mapped variables that will route
 our requests down to the uwsgi worker</p>
@@ -195,7 +195,7 @@ server {
 
 
 <h2> The uwsgi worker</h2>
-<img src="logo_uWSGI.png" /> 
+<img src="logo_uWSGI.png" />
 
 <p>In debian like, you will have to add a file /etc/uwsgi/app-available & symlink it in app-enabled.
 The content of this file will look like:</p>
@@ -222,7 +222,7 @@ MapServer version 6.4.1
 </pre>
 
 <h2>Note about uwsgi protocol</h2>
-<img src="protocol.jpg"/> 
+<img src="protocol.jpg"/>
 
 <p>At first, we got a 502 from the above setup, the first thing we did, to use setup
 was to temporary enable plain tcp communcation (no socket) between nginx and uwsgi.</p>
@@ -285,7 +285,7 @@ tcpdump port 3031 -vvvvv -XX -i lo
 2015/03/03 17:58:59 [debug] 1525#0: *3 uwsgi param: "REQUEST_METHOD: GET"
 </pre>
 
-<p>After a dig in [Reading The Great Fucking protocol RFC](http://uwsgi-docs.readthedocs.org/en/latest/Protocol.html),
+<p>After a dig in <a href=http://uwsgi-docs.readthedocs.org/en/latest/Protocol.html"">Reading The Great Fucking protocol RFC</a>
  We can now inspect what we could have fuck under the hood, and see that the <b>modifier</b> wrong (0 instead of 9).</p>
 
 <p>And we clearly saw that we were missing to tell to uwsgi to switch over the cgi plugin from nginx.
