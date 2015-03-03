@@ -143,9 +143,14 @@ tcpdump port 3031 -vvvvv -XX -i lo
 ```
 -- unavailable modifier requested: 0 --
 ```
+- And see that the first uwsgi stuff, nginx side is
+```
+2015/03/03 17:58:59 [debug] 1525#0: *3 uwsgi param: "QUERY_STRING: map=mymap"
+2015/03/03 17:58:59 [debug] 1525#0: *3 uwsgi param: "REQUEST_METHOD: GET"
+```
 
-We can now [Read The Great Fucking protocol RFC](http://uwsgi-docs.readthedocs.org/en/latest/Protocol.html) and
-inspect what we fucked under the hood.
+After a dig in [Reading The Great Fucking protocol RFC](http://uwsgi-docs.readthedocs.org/en/latest/Protocol.html),
+ We can now inspect what we could have fuck under the hood.
 
 And we clearly saw that we were missing to tell to uwsgi to switch over the cgi plugin from nginx.
 Thus, we just needed, to.
