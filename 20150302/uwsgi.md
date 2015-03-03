@@ -12,7 +12,7 @@ Hopefully, we won't have to get apache back because we have a ubersecret :
 [uwsgi](https://uwsgi-docs.readthedocs.org/en/latest/), the savior.
 
 
-<img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAmsAAADiCAYAAAARbIDdAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+![logo]("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAmsAAADiCAYAAAARbIDdAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
 jwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAAd0SU1FB9wDFxEVBXl9uN4AAP9mSURBVHhe7L0HvG5JVea9z83dt29n
 aHKUrA0YSDKCigHFUcZxFHWUzzENmBAUEBEQBFEEFEGiCAZkFElKUCQp2MQmQxObbprO8fbN6Vv/
@@ -2170,7 +2170,7 @@ wv3OGGN/zRQ+2za8zW+5ZSDxgx/9dGBOBYgx+c8vfq7OH/YYet4rPRjghv6j/YvG5cJ6+YlYZjqf
 hpdh/8Q78rFYM8M9Cj+DfRgEAn6NhbXmJWMEM3KMCtofAGTwIMwBEtWjyr/kGVXbaDv42eLh7aFP
 AKOBl4EnGV4GIMikWiw4V0nSn+Rhno+hz3DwUJOniIdx72Xb1VveaJIIelG2alG8eYGVcKtNn5dk
 q7mSjClah2cvef4JYlrSKKuKt4isv38oVwuq6QrWjNd+0HZNb8QRfqPrzpiqqI0o8I0HbvNyyA6O
-jl5q/P8Dn3Vx3w8vsPwAAAAASUVORK5CYII=" alt='nginx_vs_apache_magento_mash_in_bash1 (1)' />
+jl5q/P8Dn3Vx3w8vsPwAAAAASUVORK5CYII=")
 
 ## Prerequisites
 The first thing is to install mapserv, nginx & uwsgi.
