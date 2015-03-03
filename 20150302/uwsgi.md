@@ -128,7 +128,7 @@ Then, we can finally do the capture of a map request:
 ```
 curl -vvvv http://foo.net/cgi-bin/mapserv?map=mymap
 ```
-- from antoher terminal:
+- from another terminal:
 ```
 tcpdump port 3031 -vvvvv -XX -i lo
         ...
