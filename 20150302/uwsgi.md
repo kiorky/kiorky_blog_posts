@@ -59,7 +59,7 @@ WEB
 END
 ```
 
-## NGINX Vhost
+## <img src="Nginx-logo.png"/> NGINX Vhost
 The first thing is to add to the server, some mapped variables that will route
 our requests down to the uwsgi worker
 ```
