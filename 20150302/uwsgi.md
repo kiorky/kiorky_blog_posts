@@ -10,7 +10,7 @@ And, yes with the plain old school mapserv cgi.
 
 <img src="nginx_vs_apache.png" alt="logo">
 
-Hopefully, we won't have to get apache back because we have a ubersecret <img src="topsecret.png" alt="logo"> :
+Hopefully, we won't have to get apache back because : <img src="topsecret.png" alt="logo" width=60"> :
 [uwsgi](https://uwsgi-docs.readthedocs.org/en/latest/), the savior.
 
 
