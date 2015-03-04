@@ -1,52 +1,26 @@
-<h1>Installing mapserver with nginx & uwsgi<h1>
-
-<h2> Intro</h2>
-<p>
-Nowodays, apache httpd can be considered as a great fossil.
-Bu how comes when you want to drop some old things in you infra, like cgi's ?
-That's the case when we want to publish out some shapefiles via mapserver.
-And, yes with the plain old school mapserv cgi.
-</p>
-
-<img src="nginx_vs_apache.png" alt="logo">
-
-<p>
-Hopefully, we won't have to get apache back because : <img src="topsecret.png" /> :
-<a href="https://uwsgi-docs.readthedocs.org/en/latest">uwsgi</a>, the savior.
-</p>
-
-
+<p>Can you get avoid this great living fossil of Apache httpd when publishing shapefiles via MapServer CGI?<br /><br /></p>
+<h1><img alt="logo" src="nginx_vs_apache.png" /></h1>
+<p>Hopefully, we won't have to because:: <a href="https://uwsgi-docs.readthedocs.org/en/latest">uWSGI</a>, the savior.</p>
 <h2>Prerequisites</h2>
-<p>
-The first thing is to install mapserv, nginx & uwsgi.
-I can't more than highly recommand to use a decent version of nginx(1.6/1.7) & mapserver.
-Your nginx must have the uwsgi module built with.
-</p>
-
-<p>
-Makina-Corpus even use their <a href="https://launchpad.net/~makinacorpus/+archive/ubuntu/nginx">own ppa</a>
-of it (1.7.10 at the time of this article writing).
-</p>
-
-<p>
-For mapserver, you can use <a href="https://launchpad.net/~ubuntugis/+archive/ubuntu/ubuntugis-unstable">ubuntugis unstable</a>.
-</p>
-
-<p>
-After the repositories configuration, you can eventually install the softwares
-</p>
-<pre>
-apt-get install mapserv uwsgi nginx
+<p>The first thing is to install MapServer, nginx &amp; uWSGI. I can't recommend enough using a decent version of nginx(1.6/1.7) &amp; MapQerver. Your nginx must have the uWSGI module built with.</p>
+<p>Makina Corpus even use their <a href="https://launchpad.net/~makinacorpus/+archive/ubuntu/nginx">own ppa</a> for this (1.7.10 at the time of writing).</p>
+<p>For MapServer, you can use <a href="https://launchpad.net/~ubuntugis/+archive/ubuntu/ubuntugis-unstable">ubuntugis unstable</a>.</p>
+<p>After the repositories configuration, you can eventually install the softwares</p>
+<pre>apt-get install mapserv uwsgi nginx
 </pre>
-
-<h2>Mapsserver</h2>
-<img src="mapserverlogo.png" />
-
-<p>When you have at least all of those 3 prerequisites, you ll have to la
-y down your served maps on the filesystem
-An example here:</p>
-<pre>
-/data/tmp
+<h2>MapServer</h2>
+<table>
+<tbody>
+<tr>
+<td><img src="mapserverlogo.png" /></td>
+<td>
+<p>     When yo<span>u have at least all of those 3 prerequisites,<br /></span><span>     you'll have to lay down your served maps on the filesystem</span></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><span>An example here</span></p>
+<pre>/data/tmp
 /data/maps/map/map.map
 /data/maps/map/layer/Layer.dbf
 /data/maps/map/layer/Layer.prj
@@ -55,104 +29,92 @@ An example here:</p>
 /data/maps/map/layer/Layer.shp
 /data/maps/map/layer/Layer.shx
 </pre>
-
 <p>Don't forget to reference shape in your top section in the mapfile:</p>
-<pre>
-MAP
+<pre>MAP
   SHAPEPATH "/data/maps"
 </pre>
-
-<p>Don't forget to reference images path in your WEP section in the mapfile:</p>
-<pre>
-WEB
+<p>Don't forget to reference images path in your <strong>WEB</strong> section in the mapfile:</p>
+<pre>WEB
   IMAGEPATH "/data/tmp"
   IMAGEURL "http://foo.net/tiles"
 END
 </pre>
-
-<h2>NGINX vhost</h2>
-
-
-<p><img src="Nginx-logo.png"/> The first thing is to add to the server, some mapped variables that will route
-our requests down to the uwsgi worker</p>
-<pre>
-map $args $mapname {
+<h2></h2>
+<h2>nginx vhost</h2>
+<table>
+<tbody>
+<tr>
+<td><img src="Nginx-logo.png" /></td>
+<td>
+<p>The first thing is to add to the server, some mapped variables that will route our requests down to the uWSGI worker</p>
+</td>
+</tr>
+</tbody>
+</table>
+<pre>map $args $mapname {
     default: myapp;
-    "~*(\?|&)?map=myapp(&?|$)" myapp;
+    "~*(\?|&amp;)?map=myapp(&amp;?|$)" myapp;
 }
 
 map $args $mapfile {
     default: /srv/projects/myapp/data/maps/myapp/map.map;
-    "~*(\?|&)?map=myapp(&?|$)" /srv/projects/myapp/data/maps/myapp/map.map;
+    "~*(\?|&amp;)?map=myapp(&amp;?|$)" /srv/projects/myapp/data/maps/myapp/map.map;
 }
 
 map $args $maproot {
     default: /srv/projects/myapp/data/static;
-    "~*(\?|&)?map=myapp(&?|$)" /srv/projects/myapp/data/maps;
+    "~*(\?|&amp;)?map=myapp(&amp;?|$)" /srv/projects/myapp/data/maps;
 }
 
 map $args $mapgo {
     default: 0;
-    "~*(\?|&)?map=myapp(&?|$)" 1;
+    "~*(\?|&amp;)?map=myapp(&amp;?|$)" 1;
 }
 </pre>
-
 <p>Then in the vhost, we can add a section to serve tiles</p>
-<pre>
-location /tiles/ {
+<pre>location /tiles/ {
      alias /srv/projects/myapp/data/tmp;
 }
 </pre>
-
-<p>Then a section to enable routing down to the worker by relying on the retcode from the mapped variables
-that we defined above. This will ensure that only the expected request can go down to the uwsgi worker, as you know,
-mapserver can also take an arbitrary mapfile path, and be a security breach.</p>
-<pre>
-location /cgi-bin/mapserv {
+<p>Then a section to enable routing down to the worker by relying on the retcode from the mapped variables that we defined above. This will ensure that only the expected request can go down to the uWSGI worker, as you know, MapServer can also take an arbitrary mapfile path, and be a security breach.</p>
+<pre>location /cgi-bin/mapserv {
   error_page 420 = @mapserv;
   if ( $mapgo = "1" ) {
    return 420;
   }
 }
 </pre>
-<p>When upon, we detect that "mapgo=1", so when the ``map`` get parameter matches one of our maps,
-we will internally return <b>420</b> errcode, which is handled by a named location which will
-be processed by our mapserver worker.</p>
-
-
+<p>When upon, we detect that "mapgo=1", so when the ``map`` get parameter matches one of our maps, we will internally return <b>420</b> errcode, which is handled by a named location which will be processed by our MapServer worker.</p>
 <p>And another related section to do the real stuff</p>
-<pre>
-location @mapserv {
+<pre>location @mapserv {
    include uwsgi_params;
    uwsgi_modifier1 9;
-   uwsgi_param UWSGI_SETENV $mapname=$mapfile;
-   uwsgi_param UWSGI_SETENV MS_MAPFILE=$mapfile;
-   uwsgi_param UWSGI_SETENV MS_MAP_NO_PATH=no;
+   uwsgi_param uwsgi_SETENV $mapname=$mapfile;
+   uwsgi_param uwsgi_SETENV MS_MAPFILE=$mapfile;
+   uwsgi_param uwsgi_SETENV MS_MAP_NO_PATH=no;
    uwsgi_pass unix:///srv/projects/myapp/data/socket;
 }
 </pre>
 <p>Here we explicitly disable path checking in map parameter, and pass the request down to the worker.</p>
-
-<p>Which give us finally:</p>
-<pre>
-map $args $mapname {
+<p>Which gives us finally:</p>
+<pre>map $args $mapname {
     default: myapp;
-    "~*(\?|&)?map=myapp(&?|$)" myapp;
+    "~*(\?|&amp;)?map=myapp(&amp;?|$)" myapp;
 }
 
 map $args $mapfile {
     default: /srv/projects/myapp/data/maps/myapp/map.map;
-    "~*(\?|&)?map=myapp(&?|$)" /srv/projects/myapp/data/maps/myapp/map.map;
+    "~*(\?|&amp;)?map=myapp(&amp;?|$)" /srv/projects/myapp/data/maps/myapp/map.map;
 }
 
 map $args $maproot {
     default: /srv/projects/myapp/data/static;
-    "~*(\?|&)?map=myapp(&?|$)" /srv/projects/myapp/data/maps;
+    "~*(\?|&amp;)?map=myapp(&amp;?|$)" /srv/projects/myapp/data/maps;
 }
 
 map $args $mapgo {
     default: 0;
-    "~*(\?|&)?map=myapp(&?|$)" 1;
+    "~*(\?|&amp;)?map=myapp(&amp;?|$)" 1;
 }
 
 server {
@@ -185,22 +147,18 @@ server {
       include uwsgi_params;
       uwsgi_modifier1 9;
       uwsgi_pass 127.0.0.1:3031;
-      uwsgi_param UWSGI_SETENV $mapname=$mapfile;
-      uwsgi_param UWSGI_SETENV MS_MAPFILE=$mapfile;
-      uwsgi_param UWSGI_SETENV MS_MAP_NO_PATH=no;
+      uwsgi_param uwsgi_SETENV $mapname=$mapfile;
+      uwsgi_param uwsgi_SETENV MS_MAPFILE=$mapfile;
+      uwsgi_param uwsgi_SETENV MS_MAP_NO_PATH=no;
       uwsgi_pass unix:///srv/projects/myapp/data/socket;
   }
 }
 </pre>
-
-
-<h2> The uwsgi worker</h2>
-
-
-<p><img src="logo_uWSGI.png" /> In debian like, you will have to add a file /etc/uwsgi/app-available & symlink it in app-enabled.</p>
+<h2></h2>
+<h2>The uWSGI worker</h2>
+<p><img src="logo_uWSGI.png" /> In Debian based distributions, you will have to add a file /etc/uwsgi/app-available &amp; symlink it in app-enabled.</p>
 <p>The content of this file will look like:</p>
-<pre>
-[uwsgi]
+<pre>[uwsgi]
 master = true
 plugins = cgi
 #async = 20
@@ -211,122 +169,94 @@ uid = www-data
 gid = www-data
 cgi = /usr/bin/mapserv
 </pre>
-
 <p>And now, TaDa:</p>
-<pre>
-curl -vvv 'http://foo.net/cgi-bin/mapserv?map=mymap&VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities'
+<pre>curl -vvv 'http://foo.net/cgi-bin/mapserv?map=mymap&amp;VERSION=1.3.0&amp;SERVICE=WMS&amp;REQUEST=GetCapabilities'
 ...
 
 WMS_Capabilities version="1.3.0"
 MapServer version 6.4.1
 </pre>
-
-<h2>Note about uwsgi protocol</h2>
-
-
-<p><img src="protocol.jpg"/>At first, we got a 502 from the above setup, the first thing we did, to use setup
-was to temporary enable plain tcp communcation (no socket) between nginx and uwsgi.</p>
-<br/>
+<h2></h2>
+<h2>Note about uWSGI protocol</h2>
+<table>
+<tbody>
+<tr>
+<td><img src="protocol.jpg" /></td>
+<td>
+<p>   At first, we got a 502 from the above setup, the first thing we did was to temporary enable<br />    plain TCP communcation (no socket) between nginx and uWSGI.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h1></h1>
 <p>nginx</p>
-<pre>
-uwsgi_pass 127.0.0.1:3031;
+<pre>uwsgi_pass 127.0.0.1:3031;
 </pre>
-
-<p>uwsgi</p>
-<pre>
-socket = localhost:3031
+<p>uWSGI</p>
+<pre>socket = localhost:3031
 </pre>
-
-<p>Then restart nginx, stop uwsgi emperor, and run only our worker, in foreground (non daemonized)</p>
-<pre>
-service nginx restart
+<p>Then restart nginx, stop uWSGI emperor, and run only our worker, in foreground (non daemonized)</p>
+<pre>service nginx restart
 service uwsgi stop
 uwsgi /etc/uwsgi/apps-enabled/config.ini
 </pre>
-
-<p>We can also increase nginx logging, and tail -f it's logs on another terminal:
-edit nginx configuration:</p>
-<pre>
-error_log /foo.log debug;
+<p>We can also increase nginx logging, and tail -f it's logs on another terminal: edit nginx configuration:</p>
+<pre>error_log /foo.log debug;
 </pre>
-
 <p>And then issue</p>
-<pre>
-service nginx restart
+<pre>service nginx restart
 tail -f /foo.log
 </pre>
-
-<p>Then, we can finally do the capture of a map request:
-- from one terminal:</p>
-<pre>
-curl -vvvv 'http://foo.net/cgi-bin/mapserv?map=mymap&VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities'
+<p>Then, we can finally do the capture of a map request:<br /> - from one terminal:</p>
+<pre>curl -vvvv 'http://foo.net/cgi-bin/mapserv?map=mymap&amp;VERSION=1.3.0&amp;SERVICE=WMS&amp;REQUEST=GetCapabilities'
 502
 </pre>
-
 <p>- from another terminal:</p>
-<pre>
-tcpdump port 3031 -vvvvv -XX -i lo
-        ...
-        foo.net.53278 > foo.net.3031: ...
+<pre>tcpdump port 3031 -vvvvv -XX -i lo
+        foo.net.53278 &gt; foo.net.3031: ...
         0x0000:  0000 0000 0000 0000 0000 0000 0800 4500  ..............E.
         0x0010:  0293 45b3 4000 4006 f4af 7f00 0001 7f00  ..E.@.@.........
         0x0020:  0001 eae4 0bd7 f33f 9714 6a07 fbc9 5018  .......?..j...P.
-        0x0030:  0056 0088 -> 00 <- 00 0067 0200 0c00 5155 4552  .V.....g....QUER
-</pre>
+        0x0030:  0056 0088 - 00 - 00 0067 0200 0c00 5155 4552  .V.....g....QUER
 
-<p>- And the following bits in uwsgi:</p>
-<pre>
--- unavailable modifier requested: 0 --
 </pre>
-
-<p>- And see that the first uwsgi stuff, nginx side is</p>
-<pre>
-2015/03/03 17:58:59 [debug] 1525#0: *3 uwsgi param: "QUERY_STRING: map=mymap"
+<p>- And the following bits in uWSGI:</p>
+<pre>-- unavailable modifier requested: 0 --
+</pre>
+<p>- And see that the first uWSGI stuff, nginx side is</p>
+<pre>2015/03/03 17:58:59 [debug] 1525#0: *3 uwsgi param: "QUERY_STRING: map=mymap"
 2015/03/03 17:58:59 [debug] 1525#0: *3 uwsgi param: "REQUEST_METHOD: GET"
 </pre>
-
-<p>After a dig in <a href=http://uwsgi-docs.readthedocs.org/en/latest/Protocol.html"">Reading The Great Fucking protocol RFC</a>
- We can now inspect what we could have fuck under the hood, and see that the <b>modifier</b> wrong (0 instead of 9).</p>
-
-<p>And we clearly saw that we were missing to tell to uwsgi to switch over the cgi plugin from nginx.
-Thus, we just needed, to ajust in nginx config, in the handler part, before the uwsgi_pass</p>
-<pre>
-location @mapserv {
+<p>After having a look at <a class="external-link" href="http://uwsgi-docs.readthedocs.org/en/latest/Protocol.html" target="_self" title="">The Great protocol RFC</a> we can now inspect what could have gone wrong under the hood, and see that the <b>modifier</b> is wrong (0 instead of 9).</p>
+<p>And we clearly see that we missed telling uWSGI to switch over the CGI plugin from nginx. Thus, we just needed to ajust in nginx config, in the handler part, before the uwsgi_pass</p>
+<pre>location @mapserv {
     ...
     uwsgi_modifier1 9;
     uwsgi_pass 127.0.0.1:3031;
     ...
 }
 </pre>
+<p>Now the capture shown a correct <b>9 modifier1</b>.</p>
+<pre>tcpdump port 3031 -vvvvv -XX -i lo
+        foo.net.53422 &gt; foo.net.3031: ...
+        0x0030:  0056 0087 0000 - 09 &lt; 66 0200 0c00 5155 4552  .V.....f....QUER
 
-Now the capture shown a correct <b>9 modifier1</b>.
-<pre>
-tcpdump port 3031 -vvvvv -XX -i lo
-        foo.net.53422 > foo.net.3031: ...
-        0x0000:  0000 0000 0000 0000 0000 0000 0800 4500  ..............E.
-        0x0010:  0292 643c 4000 4006 d627 7f00 0001 7f00  ..d<@.@..'......
-        0x0020:  0001 d0ae 0bd7 dd2a a5ab ce25 41fe 5018  .......*...%A.P.
-        0x0030:  0056 0087 0000 -> 09 <- 66 0200 0c00 5155 4552  .V.....f....QUER
 </pre>
-
-And a WMS <b>GetCapabilities</b> XML call should work
-<pre>
-curl 'http://foo.net/cgi-bin/mapserv?map=mymap&VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities'
+<p>And a WMS <b>GetCapabilities</b>XML call should work</p>
+<pre>curl 'http://foo.net/cgi-bin/mapserv?map=mymap&amp;VERSION=1.3.0&amp;SERVICE=WMS&amp;REQUEST=GetCapabilities'
 ...
 WMS_Capabilities version="1.3.0"
 MapServer version 6.4.1
-<Service>
-...
 </pre>
-
-
-
-<h2> Words about  gunicorn</h2>
-<img src="penguin_puppet.jpg" />
-
-<p>
-Even if we could made separation of concerns by using uwsgi as our python app router of choice, we
-don't for now.
-Indeed, our policy for python workers (django, pyramid, flask & etc) is still recommend the use of gunicorn
-as it is fast, reliable, scalable and still in python, which make debugging apps really simpler and straighforward.
-</p>
+<h2>Words about Gunicorn</h2>
+<table>
+<tbody>
+<tr>
+<td><img src="penguin_puppet.jpg" /></td>
+<td>
+<p>   Even if we could made separation of concerns by using uWSGI as our Python app router of choice, we<br />   don't for now. Indeed, our policy for Python workers (Django, Pyramid, Flask, etc) is still to<br />   recommend the use of Gunicorn which is fast, reliable, scalable and still in Python, which <br />   makes debugging apps really simpler and straightforward.</p>
+<div></div>
+</td>
+</tr>
+</tbody>
+</table>
